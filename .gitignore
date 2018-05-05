@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+
+node_modules
+bin
+YoutubeDownloader
+yd-linux-x64

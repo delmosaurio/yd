@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>YouTube Downloader</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/styles.css">
+    
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#"><i class="fa fa-youtube"></i> Downloader</a>
+
+      <form class="form-inline my-2 my-lg-0">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit"
+                data-bind="click: folderHandler"><i class="fa fa-folder-open-o"></i> Descargas</button>
+      </form>
+    </nav>
+
+    <main class="container">      
+      <div class="row">
+        <div class="col-12">
+            <form>
+              <div class="form-row">
+                <div class="col-12">
+                  <div class="input-group mb-3">
+                    <input name="url"
+                           type="text"
+                           data-bind="value: url, valueUpdate: 'input'"
+                           class="form-control"
+                           placeholder="http://www.youtube.com/?v=codigo" 
+                           aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button id="downButton"
+                              class="btn btn-outline-secondary"
+                              type="button"
+                              data-bind="click: downHanlder, enable: url() !== ''">
+                              <i class="fa fa-download"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row" data-bind="visible: error() !== ''">
+                <div class="col-12">
+                    <div class="alert alert-danger" role="alert">
+                      <i class="fa fa-warning"></i> <span data-bind="text: error"></span>
+                    </div>
+                </div>
+              </div>
+            </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Titulo</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody data-bind="foreach: list">
+                  <tr>
+                    <td data-bind="text:  $data.id"></td>
+                    <td data-bind="text: $data.title"></td>
+                    <td class="text-center">
+                      <span data-bind="visible: $data.status() == 'loading'"><i class="fa fa-spinner fa-spin"></i> Cargando...</span>
+                      <span data-bind="visible: $data.status() == 'queue'"><i class="fa fa-spinner fa-spin"></i> En espera ...</span>
+                      <span data-bind="visible: $data.status() == 'downloading'">
+                          <div class="progress">
+                            <div class="progress-bar"
+                                 role="progressbar"
+                                 data-bind="text: $data.progressText, style: { 'width': $data.progressText() }"
+                                 aria-valuenow="$data.progress"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100">
+                            </div>
+                          </div>
+                      </span>
+                      <span data-bind="visible: $data.status() == 'complete'" style="color: #155724"><i class="fa fa-check"></i></span>
+                      <span data-bind="visible: $data.status() == 'error', attr: { title: $data.error }"  style="color: #721c24"><i class="fa fa-warning"></i></span>
+                    </td>
+                  </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="container">
+        <span class="text-muted">&copy; Powered by Raffolandia.</span>
+        <span data-bind="visible: downPath() !== ''"> | Descargas: </span>
+        <span data-bind="text: downPath"></span>
+      </div>
+    </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+    <script>
+      // You can also require other files to run in this process
+      require('./renderer.js')
+    </script>
+  </body>
+</html>
